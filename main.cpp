@@ -12,11 +12,15 @@ public:
 };
 
 std::vector<Ride> rides;
-
 std::vector<std::vector<int>> plan;
-std::set<int> usedRides;
 
 int points = 0;
+int pointsMax = 0;
+int finishedRides = 0;
+int earnedBonuses = 0;
+int totalWaitingTime = 0;
+int totalDistanceToRide = 0;
+
 
 void readInFile(char* name) {
 	std::ifstream fileIn;
@@ -60,11 +64,14 @@ void process() {
 			
 			// gointg to start
 			t += distance(x, y, ride.a, ride.b);
+			totalDistanceToRide += distance(x, y, ride.a, ride.b);
 			
 			// waiting for start and check bonus
 			if (t <= ride.s) {
+				totalWaitingTime += ride.s - t;
 				t = ride.s;
 				points += B;
+				earnedBonuses++;
 			}
 
 			// going to finish and check time
@@ -73,8 +80,17 @@ void process() {
 			t += distance(ride.a, ride.b, ride.x, ride.y);
 			if (t <= ride.f) {
 				points += distance(ride.a, ride.b, ride.x, ride.y);
+				finishedRides++;
 			}
 		}
+	}
+}
+
+void calculateMaxPoints() {
+	pointsMax = N*B;
+	for each (Ride ride in rides)
+	{
+		pointsMax += distance(ride.a, ride.b, ride.x, ride.y);
 	}
 }
 
@@ -88,8 +104,20 @@ int main(int argc, char* argv[]) {
 	readInFile(argv[1]);
 	readOutFile(argv[2]);
 	
+	calculateMaxPoints();
+
 	process();
-	std::cout << points;
+
+	std::cout << "Data: " << argv[1] << std::endl;
+	std::cout << "Proposed solution: " <<argv[2] << std::endl;
+	std::cout << "Successfully finished " << finishedRides << " rides from " << rides.size() << " rides" << std::endl;
+	std::cout << "   ... also " << earnedBonuses << " of them with bonuses" << std::endl;
+	if (finishedRides != 0) {
+		std::cout << "Average passenger waiting time: " << 1.0 * totalWaitingTime / finishedRides << std::endl;
+		std::cout << "Average distance to new ride: " << 1.0 * totalDistanceToRide / finishedRides << std::endl;
+	}
+	std::cout << "----------------------------------------------------------------------------" << std::endl;
+	std::cout << "Earned: " << points << " points from theoretical maximum of " << pointsMax << " points" << std::endl;
 
 	return 0;
 }
