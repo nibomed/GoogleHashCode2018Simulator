@@ -2,10 +2,10 @@
 # GoogleHashCode2018Simulator
 My points calculator for Google Hash Code 2018 competition (Self-driving rides problem)
 
-# Compile:
+Compile:
 gcc main.cpp -o sim
 
-# Usage:
+Usage:
 ./sim a_example.in a_example.out
 Data: a_example.in
 Proposed solution: a_example.out
