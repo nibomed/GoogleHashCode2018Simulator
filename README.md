@@ -3,7 +3,7 @@
 My points calculator for Google Hash Code 2018 competition (Self-driving rides problem)
 
 Compile:
-gcc main.cpp -o sim
+Create empty C++ project in VS and copy code to new cpp file
 
 Usage example:
 
